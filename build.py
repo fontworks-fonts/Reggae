@@ -7,8 +7,13 @@ print ("[Reggae One] Generating TTF")
 __main__.main(("-g","sources/ReggaeOne.glyphs", "-o","ttf",))
 
 path = "master_ttf/ReggaeOne-Regular.ttf"
-hinted = "master_ttf/ReggaeOne-Regular-hinted.ttf"
 
+def GASP_set(font:TTFont):
+    if "gasp" not in font:
+        font["gasp"] = newTable("gasp")
+        font["gasp"].gaspRange = {}
+    if font["gasp"].gaspRange != {65535: 0x000A}:
+        font["gasp"].gaspRange = {65535: 0x000A}
 
 modifiedFont = TTFont(path)
 print ("[Reggae One] Adding stub DSIG")
@@ -23,20 +28,10 @@ modifiedFont["name"].addMultilingualName({'ja':'レゲエ One'}, modifiedFont, n
 modifiedFont["name"].addMultilingualName({'ja':'Regular'}, modifiedFont, nameID = 2, windows=True, mac=False)
 modifiedFont["head"].flags |= 1 << 3        #sets flag to always round PPEM to integer
 
+GASP_set(modifiedFont)
+
 modifiedFont.save("fonts/ttf/ReggaeOne-Regular.ttf")
 
 shutil.rmtree("instance_ufo")
 shutil.rmtree("master_ufo")
 shutil.rmtree("master_ttf")
-
-subprocess.check_call(
-    [
-        "ttfautohint",
-        "--stem-width",
-        "nsn",
-        "fonts/ttf/ReggaeOne-Regular.ttf",
-        "fonts/ttf/ReggaeOne-Regular-hinted.ttf",
-    ]
-)
-
-shutil.move("fonts/ttf/ReggaeOne-Regular-hinted.ttf", "fonts/ttf/ReggaeOne-Regular.ttf")
