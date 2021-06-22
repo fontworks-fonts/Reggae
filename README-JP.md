@@ -30,6 +30,10 @@
 ワーキングディレクトリ(カレントディレクトリ)を「Reggae」フォルダへ変更し、**build.py**を実行します。
 
     $ python build.py
+    
+**--autohinting**コマンドラインオプションを指定すると、ttfautohintを使用してヒントを付与します。
+
+    $ python build.py --autohinting
 
 
 ### ライセンス
